@@ -1,0 +1,4 @@
+# 网 github 上传文件 git 不会追踪被忽略的文件
+/node_modules/
+# 忽略所有 txt 类型的文件
+*.txt 
