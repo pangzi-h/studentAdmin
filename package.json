@@ -1,0 +1,18 @@
+{
+  "name": "13dayhoutaiguanli",
+  "version": "1.0.0",
+  "description": "`技术栈: Node+express+Mongodb+mongoose+jquery+es6`",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-session": "^1.4.0",
+    "ejs": "^3.1.2",
+    "formidable": "^1.2.2",
+    "md5-node": "^1.0.1",
+    "mongoose": "^5.9.10"
+  }
+}
