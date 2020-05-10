@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    <title>管理员信息</title>
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <!-- FONT AWESOME ICONS  -->
+    <link href="/css/font-awesome.css" rel="stylesheet">
+    <!-- CUSTOM STYLE  -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/pager.css">
+    <!-- HTML5 Shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!-- - : 不转义输出,不会转移html标签  = : 转义输出,会把HTML标签转义为 &gt; -->
+    <%- include('./header.ejs',{idx:'admin'}) %>  
+    <!-- MENU SECTION END-->
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row pull-right" style='width:50%;'>
+                <div class="input-group">
+                    <input type="search" class="form-control search" list='dataList' placeholder="请输入管理员姓名">
+                    <datalist id='dataList'>
+                        
+                    </datalist>
+                    <span class="input-group-addon" style='cursor:pointer;user-select:none;' id='search'>搜索</span>     
+                    <input type="button" class='btn btn-success form-control exportExcel' value='导出为Excel'>
+                </div>
+                <iframe id='exportExcel' width='0' height='0' src="" frameborder="0"></iframe>
+            </div>
+            <table class="table">
+                <caption>管理员列表</caption>
+                <thead>
+                    <tr>
+                        <th>管理员序号</th>
+                        <th>名字</th>
+                        <th>[操作]</th>
+                    </tr>
+                </thead>
+                <tbody class='adminList'>
+                    
+                </tbody>
+            </table>
+
+            <div id="wrap"></div>
+        </div>
+    </div>
+    <!-- CONTENT-WRAPPER SECTION END-->
+    <%- include('./footer.ejs') %>
+    <!-- FOOTER SECTION END-->
+    <!-- JAVASCRIPT AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+    <!-- CORE JQUERY SCRIPTS -->
+    <script src="/js/jquery-1.11.1.js"></script>
+    <!-- BOOTSTRAP SCRIPTS  -->
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/pagination.js"></script>
+    <script>
+        $(function (){
+            new AdminList();
+        })
+        function AdminList(){
+            this.page = 1; //默认页
+
+            this.init();
+
+            this.bindEvent();
+        }
+        AdminList.prototype.init = function (){
+            var _this = this;
+            $.get('/admin/msg',{page:this.page},function (res){
+                //console.log(res);
+                _this.renderDom(res);
+
+            });
+        }
+        AdminList.prototype.renderDom = function (data){
+            //console.log(data);
+            var _this = this;
+            if(data.results.length >0){
+                //渲染DOM
+                $('.adminList').empty();
+                $.each(data.results,function (idx,item){
+                    var tr = $('<tr></tr>');
+                    tr.html(`
+                        <td>${item.sid}</td>
+                        <td contenteditable="true">${item.username}</td>
+                        <td>
+                            <input type="button" value='删除' class='btn btn-warning del' data-sid='${item.sid}'>
+                            <input type="button" value='修改' class='btn btn-info change' data-sid='${item.sid}'>
+                        </td>
+                    `);
+                    tr.appendTo($('.adminList'));
+                })
+                //渲染分页:
+                pagination.init({
+                    wrapid: 'wrap', //页面显示分页器ID
+                    total: data.count, //总数据条数
+                    pagesize: 4, //每页3条数据
+                    currentPage: _this.page, //当前页
+                    onPagechange: function (n) {
+                        //页面改变时触发， 参数 n 为改变后的当前页数
+                        console.log(n);
+                        _this.page = n;
+                        _this.init();
+                    }
+                })    
+            }else{
+                if(_this.page > 1){
+                    _this.page -= 1;
+                    _this.init();
+                }else{
+                    $('.adminList').empty();
+                    $('#wrap').empty();
+                    $('.adminList').html('暂无数据');
+                }
+            }
+          
+        }
+        AdminList.prototype.bindEvent = function (){
+            var _this = this;
+            //通过管理员姓名模糊搜索
+            $('.search').on('input',this.searchAdmin.bind(this));
+            //跳转新窗口渲染管理员数据
+            $('.search').on('keydown',function (e){
+                if( e.keyCode == 13 ){
+                    //console.log('回车');
+                    _this.searchData.results && _this.renderDom(_this.searchData);
+                }
+            })
+            $('#search').on('click',function (){   
+                console.log(_this.searchData.results);            
+                _this.searchData.results && _this.renderDom(_this.searchData);
+            });
+            
+            //修改管理员信息:
+            $('.adminList').delegate('.change','click',function (){
+               
+                var sid = $(this).attr('data-sid');
+                var childrens = $(this).parent().parent().children();
+                var username = childrens.eq(1).text();                   
+                $.post('/admin/'+sid,{username},function (res){
+                    //console.log(res);
+                    if( res.error == 1 ){
+                        alert('修改成功');
+                    }else{
+                        alert('修改失败');
+                    }
+                });
+            })
+
+            // 删除管理员信息
+            $('.adminList').delegate('.del','click',function (){
+                var _confirm = confirm("确认删除该管理员?");
+                if(_confirm){
+                    var sid = $(this).attr('data-sid');
+                    // console.log(sid);
+                    $.ajax
+                        ({
+                            url:'/admin/del/'+sid,
+                            type:'delete',
+                            success (res){
+                            if( res.error == 1 ){
+                                alert('删除成功');
+                                _this.init();
+                            }else{
+                                alert('删除失败');
+                            }
+                        }
+                    });    
+                }
+              
+                
+            })
+
+              //导出为excel表 格式为xlsx 
+            $('.exportExcel').on('click',function (){
+                var _confirm = confirm('确定导出所有管理员数据');
+                if( !_confirm ) return; 
+                $.get('/admin/exportExcel',function (res){
+                    if(res.error){                      
+                        console.log(window.location + 'excel/'+res.msg);
+                        // return;
+                        window.location = 'http://localhost:3000/'+ 'excel/'+res.msg;
+                    }
+                });
+            })
+        }
+        AdminList.prototype.searchAdmin = function (){
+            var _this = this;
+            var val = $('.search').val();           
+            if( !val ){
+                _this.searchData = {};
+                this.init();
+                return;
+            }
+            $.get('/admin/search',{search:val},function (res){
+                // console.log(res);
+                $('#dataList').empty();
+                if(res.data.length > 0){
+                    //设置全局搜索数据格式
+                    
+                    $.each(res.data,function (idx,item){
+                        var option = $('<option></option>');
+                        option.val(item.name);
+                        option.text(item.name);
+                        option.appendTo($('#dataList'));
+                    })  
+                    _this.searchData = {
+                        count : res.data.length,
+                        now : 1,
+                        results : res.data
+                    }                                  
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

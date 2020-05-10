@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="duihao" unicode="&#58917;" d="M414.245926 144.971852l437.57037 453.12c7.300741 7.49037 7.111111 19.531852-0.474074 26.832593-7.49037 7.300741-19.531852 7.111111-26.832593-0.474074L398.506667 183.277037 199.111111 382.672593c-7.395556 7.395556-19.437037 7.395556-26.832593 0l0 0c-7.395556-7.395556-7.395556-19.437037 0-26.832593l212.574815-212.574815c6.731852-6.731852 17.161481-7.300741 24.557037-1.896296C411.211852 142.317037 412.823704 143.454815 414.245926 144.971852z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

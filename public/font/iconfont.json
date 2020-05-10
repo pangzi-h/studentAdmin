@@ -1,0 +1,16 @@
+{
+  "id": "1791522",
+  "name": "guanli",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1010131",
+      "name": "对号",
+      "font_class": "duihao",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>后台管理界面</title>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- description -->
+<meta name="description" content="学生管理系统">
+<!-- Bootstrap CSS -->
+<!-- 这个路径(路由) css/bootstrap.min.css 并没有在app中处理 所以会当静态资源访问 css/bootstrap.min.css 自动到public目录下找
+请求路径根据 node app.js 启动的文件的node光标位置进行寻找
+-->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- Material Design Icons CSS -->
+<link rel="stylesheet" href="css/materialdesignicons.css">
+<!-- Bootstrap Checkbox CSS -->
+<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
+<!-- Rippler CSS -->
+<link rel="stylesheet" href="css/rippler.min.css">
+<!-- Style CSS -->
+<link rel="stylesheet" href="css/loginstyle.css">
+<!-- Responsive  CSS -->
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<style>
+    .alert{
+        border:0;
+    }
+</style>
+<body>
+
+
+<div class="container py-2">
+    <div class="row">
+        <div class="col-md-12">
+			<div class="logo">
+				<a href="#">
+					<h1>Student Form</h1>
+				</a>
+			</div>
+            <div class="row">
+                <div class="col-md-6 login-form mx-auto">
+                    <!-- form card login -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="mb-0">Login</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="formLogin" class="formLogin">
+                                <div class="form-group">
+                                    <input for="username" class="form-control" id="name" name="name" placeholder="Username" type="text" required>
+                                    <i class="fa fa-user"></i>
+                                    <div class="alert"></div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input for="password" type="password" class="form-control" placeholder="Password" id="pwd" required>
+									<i class="fa fa-lock"></i>
+                                </div>
+								<div class="row mb-3">
+									<div class="col-md-12">
+										<div class="checkbox checkbox-primary">
+											<input id="checkbox1" class="styled" type="checkbox">
+											<label for="checkbox1">
+												Remember me 
+											</label>
+										</div>
+									</div>
+									<div class="col-md-12 text-left">
+										<a href="javascript:;">forgot password?</a>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<div class="col-lg-12 text-right">
+                                        <button type='button' class="btn btn-success hover-btn btn-wd " id="btnLogin"><span>Login</span></button>
+                                    </div>
+								</div>
+                            </form>
+							<div class="naw-text mb-3">
+								<h5>New to Admin?</h5>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="create-box text-block text-center my-0">
+										<span class="text-small font-weight-semibold">Not a member ?</span>
+										<a href="javascript:;" class="text-black text-small">Create new account</a>
+									</div>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                    <!-- /form card login -->
+                </div>
+            </div>
+            <!--/row-->
+        </div>
+        <!--/col-->
+    </div>
+    <!--/row-->
+</div>
+<!--/container-->
+
+<!-- jquery latest version -->
+<script src="js/jquery-1.11.1.js"></script>
+<!-- popper.min.js -->
+<script src="js/popper.min.js"></script>    
+<!-- bootstrap js -->
+<script src="js/bootstrap.js"></script>
+<!-- Jquery Rippler js -->
+<script src="js/jquery.rippler.min.js"></script>	
+<!-- script js -->
+<script src="js/script.js"></script>
+<script>
+
+    $('#btnLogin').on('click',doLogin);
+    $(document).on('keydown',function (ev){
+        if( ev.keyCode == 13 ){
+            doLogin();
+        }
+    })
+    function doLogin(){
+        var user = $('input[name=name]').val();
+        var pwd = $('#pwd').val();
+        if( !user || !pwd ) return;
+        $.post(
+            '/login',
+            {
+                username : user,
+                password : pwd
+            },
+            function (res){
+                //console.log(res);
+                if( res == 1 ){
+                    alert('登录成功');
+                    window.location.href = '/';
+                }else if ( res == -1 ){
+                    alert('密码错误');
+                }else if ( res == -2 ){
+                    alert('用户名不存在');
+                }
+            }
+        );
+    }
+
+    $('input[name=name]').on('blur',function (){
+        if( !$(this).val() ) return;
+        //验证用户名是否正确
+        $.ajax({
+            type:'propfind', //请求方式.
+            url : '/login',
+            data : {
+                username : $(this).val()
+            },
+            success (res){
+                if( res.result ){ //用户名正确
+                    $('.alert').show().removeClass('alert-warning').addClass('alert-success').html('√');
+                }else{
+                    $('.alert').show().removeClass('alert-success').addClass('alert-warning').html('用户名错误'); 
+                }
+            }
+        })
+    })
+    $('input[name=name]').on('focus',function (){
+        $('.alert').hide();
+    })
+</script>
+</body>
+</html>

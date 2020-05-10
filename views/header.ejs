@@ -1,0 +1,57 @@
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <strong>用户名 : </strong> 
+                <%= adminData.val.username %>
+                &nbsp;&nbsp;
+                <strong>上一次登录时间 : </strong>
+                <%= new Date(adminData.val.lastLoginTime).toLocaleString() %>
+            </div>
+
+        </div>
+    </div>
+</header>
+<!-- HEADER END-->
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+
+        <div class="left-div">
+            <div class="user-settings-wrapper">
+                <ul class="nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+                    <ul id="menu-top" class="nav navbar-nav navbar-right">
+                        <li><a class="<%= idx == 'index'?'menu-top-active':'' %>" href="/">学生管理</a>
+                        </li>
+                        <li><a class="<%= idx == 'addStudent'?'menu-top-active':'' %>"href="/student/addStudent">增加学生</a></li>
+                        <li><a class="<%= idx == 'admin'?'menu-top-active':'' %>"href="/admin">管理员管理</a></li>
+                        <li><a class="<%= idx == 'addAdmin'?'menu-top-active':'' %>" href="/admin/addAdmin">增加管理员</a>
+                        </li>
+                        <li><a class="<%= idx == 'out'?'menu-top-active':'' %>" href="/Logout" onclick="var _confirm = confirm('确认退出?')">退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
