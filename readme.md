@@ -12,4 +12,3 @@
 * data :  模拟数据(需要导入到mongodb内 :比如 mongoimport -d sm -c students data/student.txt)
 * public : 存放一些静态的资源(image,css,icon,js)
 * route : 路由的处理
-* 
