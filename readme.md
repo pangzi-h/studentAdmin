@@ -1,5 +1,5 @@
-# 这是一个node 开发的学生管理系统
-`技术栈: Node+express+Mongodb+mongoose+jquery+es6`
+# 这是一个node开发的后台管理系统
+`技术栈：Node + express + Mongodb + mongoose + jquery + es6`
 
 ### 项目启动
 `cnpm install / cnpm i`
@@ -15,6 +15,6 @@
 
 #### 项目功能
 1.  登陆页面的功能
-2.  学生的增删改查 管理员的增删改查.
+2.  成员的增删改查 管理员的增删改查.
 3.  数据导出成Excel表.
 4.  模糊搜索数据库里的内容
